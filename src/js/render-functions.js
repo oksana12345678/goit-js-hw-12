@@ -31,3 +31,8 @@ export function renderGallery(images) {
   });
   lightbox.refresh();
 }
+function showEndOfCollectionMessage() {
+  const endMessage = document.createElement('p');
+  endMessage.textContent = "We're sorry, but you've reached the end of search results.";
+  postList.appendChild(endMessage);
+}
