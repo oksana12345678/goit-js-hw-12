@@ -75,6 +75,10 @@ loadMoreBtn.addEventListener('click', async () => {
     const images = await fetchImages(searchTerm, (pageCounter += 1), perPage);
     appendImagesToGallery(images);
 
+    const galleryCardHeight =
+      galleryElement.firstElementChild.getBoundingClientRect().height;
+    window.scrollBy({ top: galleryCardHeight * 3, behavior: 'smooth' });
+
     if (images.length < perPage) {
       hideloadMoreBtn(), showEndOfCollectionMessage();
     }
@@ -86,18 +90,8 @@ loadMoreBtn.addEventListener('click', async () => {
     });
   } finally {
     hideLoader();
-    // smoothScrollToGallery();
   }
 });
-
-// * scroll
-// function smoothScrollToGallery() {
-//   window.scrollTo({
-//     top: 0,
-//     left: 0,
-//     behavior: 'smooth',
-//   });
-// }
 
 // *loader
 function showLoader() {
