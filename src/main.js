@@ -81,7 +81,7 @@ loadMoreBtn.addEventListener('click', async () => {
       galleryElement.firstElementChild.getBoundingClientRect().height;
     window.scrollBy({ top: galleryCardHeight * 3, behavior: 'smooth' });
 
-    if (images.length < perPage) {
+    if (images.length <= perPage) {
       hideloadMoreBtn(), showEndOfCollectionMessage();
     }
   } catch (error) {
