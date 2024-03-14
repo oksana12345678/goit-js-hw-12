@@ -5,32 +5,37 @@ import {
   renderGallery,
   galleryElement,
   showEndOfCollectionMessage,
+  appendImagesToGallery,
 } from './js/render-functions';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+
+const scrollToTopBtn = document.querySelector('.scroll-to-top');
 
 const searchForm = document.querySelector('.form');
 const inputElement = document.querySelector('.search-input');
 const loader = document.querySelector('.loader');
 const loadMoreBtn = document.querySelector('.load-more-btn');
 
+hideloadMoreBtn();
 hideLoader();
+
 let searchTerm = '';
 let pageCounter = 1;
 const perPage = 15;
 
 searchForm.addEventListener('submit', submitHandle);
-
 async function submitHandle(event) {
   event.preventDefault();
   searchTerm = inputElement.value.trim();
-  console.log(searchTerm);
+
   if (searchTerm === '') {
     iziToast.error({
       title: 'Error',
       message: 'Please enter a search term.',
       position: 'topCenter',
     });
+    hideloadMoreBtn();
 
     return;
   }
@@ -46,10 +51,11 @@ async function submitHandle(event) {
           'Sorry, there are no images matching your search query. Please try again!',
         position: 'topCenter',
       });
+      hideloadMoreBtn();
     } else {
       renderGallery(images);
       inputElement.value = '';
-      loadMoreBtn.style.display = 'flex';
+      showloadMoreBtn();
     }
   } catch (error) {
     console.error('Error fetching images:', error);
@@ -67,10 +73,10 @@ loadMoreBtn.addEventListener('click', async () => {
   try {
     showLoader();
     const images = await fetchImages(searchTerm, (pageCounter += 1), perPage);
-    renderGallery(images);
+    appendImagesToGallery(images);
+
     if (images.length < perPage) {
-      loadMoreBtn.style.display = 'none';
-      showEndOfCollectionMessage();
+      hideloadMoreBtn(), showEndOfCollectionMessage();
     }
   } catch (error) {
     console.error('Error fetching more images:', error);
@@ -80,15 +86,19 @@ loadMoreBtn.addEventListener('click', async () => {
     });
   } finally {
     hideLoader();
-    smoothScrollToGallery();
+    // smoothScrollToGallery();
   }
 });
 
 // * scroll
-function smoothScrollToGallery() {
-  const galleryHeight = galleryElement.getBoundingClientRect().height;
-  window.scrollBy({ top: -document.body.scrollHeight, behavior: 'smooth' });
-}
+// function smoothScrollToGallery() {
+//   window.scrollTo({
+//     top: 0,
+//     left: 0,
+//     behavior: 'smooth',
+//   });
+// }
+
 // *loader
 function showLoader() {
   loader.classList.remove('hidden');
@@ -97,3 +107,29 @@ function showLoader() {
 function hideLoader() {
   loader.classList.add('hidden');
 }
+
+// * button load more images
+function showloadMoreBtn() {
+  loadMoreBtn.classList.remove('hidden');
+}
+
+function hideloadMoreBtn() {
+  loadMoreBtn.classList.add('hidden');
+}
+
+window.addEventListener('scroll', () => {
+  if (document.body.scrollTop > 30 || document.documentElement.scrollTop > 30) {
+    scrollToTopBtn.style.display = 'flex';
+  } else {
+    scrollToTopBtn.style.display = 'none';
+  }
+});
+
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+}
+
+scrollToTopBtn.addEventListener('click', scrollToTop);

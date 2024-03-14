@@ -101,11 +101,21 @@ p {
   border-radius: 8px;
   width: 125px;
   height: 40px;
-  display: none;
+  display: flex;
   justify-content: center;
   align-items: center;
   border: none;
   font: 500 16px / 1.5 'Montserrat', sans-serif;
   color: #fff;
-  margin: 0 auto;
+  margin: 40px auto;
+}
+
+.end-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 400 16px / 1.5 'Montserrat', sans-serif;
+  color: #2e2f42;
+  margin: 40px auto;
+  text-align: center;
 }
