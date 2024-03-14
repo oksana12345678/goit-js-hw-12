@@ -28,6 +28,7 @@ searchForm.addEventListener('submit', submitHandle);
 async function submitHandle(event) {
   event.preventDefault();
   searchTerm = inputElement.value.trim();
+  pageCounter = 1;
 
   if (searchTerm === '') {
     iziToast.error({
@@ -52,6 +53,7 @@ async function submitHandle(event) {
         position: 'topCenter',
       });
       hideloadMoreBtn();
+      return;
     } else {
       renderGallery(images);
       inputElement.value = '';
