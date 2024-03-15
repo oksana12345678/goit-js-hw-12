@@ -22,7 +22,7 @@ hideLoader();
 let searchTerm = '';
 let pageCounter = 1;
 const perPage = 15;
-let totalHits = 500;
+let totalHits = 0;
 
 searchForm.addEventListener('submit', submitHandle);
 async function submitHandle(event) {
@@ -89,19 +89,6 @@ loadMoreBtn.addEventListener('click', async () => {
     const galleryCardHeight =
       galleryElement.firstElementChild.getBoundingClientRect().height;
     window.scrollBy({ top: galleryCardHeight * 3, behavior: 'smooth' });
-
-    // if (images.length < perPage) {
-    //   hideLoadMoreBtn();
-    //   showEndOfCollectionMessage();
-    // } else {
-    //   showLoadMoreBtn();
-    //   hideEndOfCollectionMessage();
-    // }
-    // inputElement.value = '';
-    // console.log(images);
-    // if (images.length < perPage) {
-    //   hideLoadMoreBtn(), showEndOfCollectionMessage();
-    // }
   } catch (error) {
     console.error('Error fetching more images:', error);
     iziToast.error({
