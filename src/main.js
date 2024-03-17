@@ -5,7 +5,6 @@ import {
   renderGallery,
   galleryElement,
   showEndOfCollectionMessage,
-  appendImagesToGallery,
 } from './js/render-functions';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
@@ -30,6 +29,8 @@ async function submitHandle(event) {
   searchTerm = inputElement.value.trim();
   pageCounter = 1;
 
+  galleryElement.innerHTML = '';
+
   if (searchTerm === '') {
     iziToast.error({
       title: 'Error',
@@ -45,9 +46,9 @@ async function submitHandle(event) {
 
   showLoader();
   try {
-    const images = await fetchImages(searchTerm, pageCounter, perPage);
+    const images = await fetchImages(searchTerm, (pageCounter += 1), perPage);
 
-    if (images.length === 0) {
+    if (images.hits.length === 0) {
       galleryElement.innerHTML = '';
       iziToast.info({
         title: 'Info',
@@ -58,9 +59,9 @@ async function submitHandle(event) {
       hideLoadMoreBtn();
       return;
     } else {
-      renderGallery(images);
-      showLoadMoreBtn();
+      renderGallery(images.hits);
       inputElement.value = '';
+      showLoadMoreBtn();
     }
   } catch (error) {
     console.error('Error fetching images:', error);
@@ -76,15 +77,15 @@ async function submitHandle(event) {
 
 loadMoreBtn.addEventListener('click', async () => {
   try {
-    showLoader();
     const images = await fetchImages(searchTerm, (pageCounter += 1), perPage);
-    totalHits = images.totalHits;
-    if (images.length < perPage || images.length >= totalHits) {
+    const totalHits = images.totalHits;
+
+    renderGallery(images.hits);
+    showLoader();
+    if (perPage * pageCounter >= totalHits) {
       hideLoadMoreBtn();
       showEndOfCollectionMessage();
     }
-
-    appendImagesToGallery(images);
 
     const galleryCardHeight =
       galleryElement.firstElementChild.getBoundingClientRect().height;
@@ -142,4 +143,3 @@ function scrollToTop() {
 }
 
 scrollToTopBtn.addEventListener('click', scrollToTop);
-// console.log(response.data.totalHits);

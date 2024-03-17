@@ -1,16 +1,16 @@
 .loader {
-  border: 8px double #d2ecaa;
+  border: 4px double #d2ecaa;
   border-radius: 50%;
-  border-top: 8px solid #38db69;
+  border-top: 4px solid #38db69;
   width: 50px;
   height: 50px;
   -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
   position: absolute;
-  bottom: 10px;
+  top: 80px;
   left: 50%;
   transform: translateX(-50%);
-  display: none;
+  display: block;
 }
 @-webkit-keyframes spin {
   0% {
@@ -28,4 +28,7 @@
   100% {
     transform: rotate(360deg);
   }
+}
+.hidden {
+  display: none;
 }
