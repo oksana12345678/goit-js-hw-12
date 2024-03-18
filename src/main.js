@@ -78,6 +78,7 @@ loadMoreBtn.addEventListener('click', async () => {
   try {
     if (loadMoreBtn) {
       pageCounter += 1;
+      console.log(pageCounter);
     }
     const images = await fetchImages(searchTerm, pageCounter, perPage);
 
