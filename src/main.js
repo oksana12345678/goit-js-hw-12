@@ -21,7 +21,6 @@ hideLoader();
 let searchTerm = '';
 let pageCounter = 1;
 const perPage = 15;
-let totalHits = 0;
 
 searchForm.addEventListener('submit', submitHandle);
 async function submitHandle(event) {
@@ -46,7 +45,7 @@ async function submitHandle(event) {
 
   showLoader();
   try {
-    const images = await fetchImages(searchTerm, (pageCounter += 1), perPage);
+    const images = await fetchImages(searchTerm, pageCounter, perPage);
 
     if (images.hits.length === 0) {
       galleryElement.innerHTML = '';
@@ -77,7 +76,11 @@ async function submitHandle(event) {
 
 loadMoreBtn.addEventListener('click', async () => {
   try {
-    const images = await fetchImages(searchTerm, (pageCounter += 1), perPage);
+    if (loadMoreBtn) {
+      pageCounter += 1;
+    }
+    const images = await fetchImages(searchTerm, pageCounter, perPage);
+
     const totalHits = images.totalHits;
 
     renderGallery(images.hits);
