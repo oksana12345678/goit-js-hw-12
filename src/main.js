@@ -46,6 +46,7 @@ async function submitHandle(event) {
   showLoader();
   try {
     const images = await fetchImages(searchTerm, pageCounter, perPage);
+    const totalHits = images.totalHits;
 
     if (images.hits.length === 0) {
       galleryElement.innerHTML = '';
@@ -61,6 +62,10 @@ async function submitHandle(event) {
       renderGallery(images.hits);
       inputElement.value = '';
       showLoadMoreBtn();
+    }
+    if (perPage * pageCounter >= totalHits) {
+      hideLoadMoreBtn();
+      showEndOfCollectionMessage();
     }
   } catch (error) {
     console.error('Error fetching images:', error);
@@ -80,7 +85,6 @@ loadMoreBtn.addEventListener('click', async () => {
       pageCounter += 1;
     }
     const images = await fetchImages(searchTerm, pageCounter, perPage);
-
     const totalHits = images.totalHits;
 
     renderGallery(images.hits);
